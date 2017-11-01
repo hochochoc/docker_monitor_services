@@ -1,6 +1,7 @@
 # Introduction
 
-monitor_service server collect stats of services that are running on hosts that monitor_service agents are running on to collect stats and post stats to monitor_service server by means of api server provides
+monitor_service server collect stats of services that are running on hosts that monitor_service agents are running on to collect stats and post stats to monitor_service server by means of api server provides.
+The stats agents post on server will be saved in mongodb, after UPDATE_INTERVAl seconds, database will remove all documents out of date.
 
 ## Usage
 
