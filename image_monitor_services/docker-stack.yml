@@ -1,0 +1,49 @@
+version: "3"
+services:
+  web:
+    # replace username/repo:tag with your name and image details
+    image: hocx3/monitor_services:latest
+    environment:
+      - MONGODB_ENV_MONGODB_IP=mongodb
+      - MONGODB_ENV_MONGODB_PORT=27017
+      - MONGODB_DBNAME=_monitor
+      - UPDATE_INTERVAL=300
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+    ports:
+      - "4000:80"
+    networks:
+      - webnet
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - webnet
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    command: mongod --smallfiles --logpath=/dev/null
+    networks:
+      - webnet
+networks:
+  webnet:
+  
